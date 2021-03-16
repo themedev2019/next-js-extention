@@ -4,7 +4,7 @@ class NextExt{
         let $window = window;
     }
 
-    static createElement($append, $element, $props, $child, $type){
+    static createElement($append, $element, $props, $child, $type = 'append'){
         let $el, $chiNew, $eleNew, $propsNew, $chieldNew, $typeNew;
         if( $element == '' || !$append){
             return null;
@@ -29,7 +29,7 @@ class NextExt{
         return $el;
     }
 
-    nx_append($append, $element, $props, $type){
+    nx_append($append, $element, $props, $type = 'append'){
         let $attr = ['content', 'contenthtml', 'contentHTML', 'innerhtml', 'innerHTML', 'innerText', 'contentText', 'trigger', 'removetrigger'];
         if($append){
             let $e = document.createElement($element);
@@ -60,8 +60,12 @@ class NextExt{
             } else if($type == 'after'){
                 let $len = $append.childNodes.length;
                 $append.insertBefore($e, $append.childNodes[$len]);
-            } else {
+            } else if( $type == 'append'){
                 $append.appendChild($e);
+            }else{
+                if($append.childNodes[$type]){
+                    $append.insertBefore($e, $append.childNodes[$type]);
+                } 
             }
             return $e;
         }
@@ -135,6 +139,26 @@ class NextExt{
         return false;
     } 
 
+    getParents($parent, $find =''){
+        if( $parent ){
+            if( Array.isArray($parent) && $parent.length > 0){
+                $parent.forEach(function($v, $k){
+                    if($v){
+                        NextExt.instance().getParents($v,$find);
+                    }
+                });
+            } else {
+                let $el = $parent.parentElement;
+                if($el){
+                    let $chFind = document.querySelector($find);
+                    if($chFind){
+                        return $chFind;
+                    }
+                    NextExt.instance().getParents($el,$find);
+                }
+            }
+        }
+    }
     static instance() {
         return new NextExt();
     }

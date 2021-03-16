@@ -254,7 +254,7 @@ let $footer = el(
 );
 
 
-el( document.querySelector('.app-right-side'),
+el( document.querySelector('.app-menu-ul'),
     'div',
     {
         class: 'top-div',
@@ -263,5 +263,8 @@ el( document.querySelector('.app-right-side'),
     [
 
     ],
-    'before'
+    'after'
 );
+
+let $parent = NextExt.instance().getParents(document.querySelector('.app-menu-ul'), '.app-header');
+console.log($parent);
