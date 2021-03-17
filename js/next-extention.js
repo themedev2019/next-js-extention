@@ -71,7 +71,18 @@ class NextExt{
         }
         return null;
     }
-
+    // append
+    appendEle($append, $element, $props){
+        return NextExt.instance().nx_append($append, $element, $props, 'append');
+    }
+    // after
+    afterEle($append, $element, $props){
+        return NextExt.instance().nx_append($append, $element, $props, 'after');
+    }
+    // before
+    beforeEle($append, $element, $props){
+        return NextExt.instance().nx_append($append, $element, $props, 'before');
+    }
     removeTrigger($element, $props){
         if( Object.entries($props) ){
             for (const [$k, $v] of Object.entries($props)) {
@@ -139,10 +150,11 @@ class NextExt{
         return false;
     } 
 
-    getParents($parent, $find =''){
+    // get parents class
+    getParents($parent, $find = ''){
         if( $parent ){
             if( Array.isArray($parent) && $parent.length > 0){
-                $parent.forEach(function($v, $k){
+                $parent.forEach(function($v){
                     if($v){
                         NextExt.instance().getParents($v,$find);
                     }
@@ -150,16 +162,156 @@ class NextExt{
             } else {
                 let $el = $parent.parentElement;
                 if($el){
-                    let $chFind = document.querySelector($find);
-                    if($chFind){
+                    
+                    let $chFind = $el.querySelectorAll($find);
+                    if($chFind.length > 0 ){
                         return $chFind;
+                    } else {
+                       return NextExt.instance().getParents($el, $find);
                     }
-                    NextExt.instance().getParents($el,$find);
+                    
                 }
             }
         }
     }
+
+    // get parent
+    getParent($el){
+        return ($el.parentElement) ? $el.parentElement : null;
+    }
+
+    // get Class
+    getClass($el){
+        return ($el.classList) ? $el.classList : null;
+    }
+
+    // add class
+    addClass($el, $class = ''){
+        if($el  && $class != ''){
+            if( Array.isArray($class) && $class.length > 0){
+                $class.forEach(function($v){
+                    if($v.trim() != ''){
+                        let $split = $v.trim().split(" ");
+                        if($split.length > 1){
+                            return NextExt.instance().addClass($el, $split);
+                        } else {
+                            $el.classList.add($v.trim());
+                        } 
+                    }
+                });
+            } else {
+                let $split = $class.trim().split(" ");
+                if($split.length > 1){
+                    return NextExt.instance().addClass($el, $split);
+                }else{
+                    $el.classList.add($class);
+                }
+            }
+        }
+    }
+
+    // remove class
+    removeClass($el, $class = ''){
+        if($el && $class != ''){
+            if( Array.isArray($class) && $class.length > 0){
+                $class.forEach(function($v){
+                    if($v.trim() != ''){
+                        let $split = $v.trim().split(" ");
+                        if($split.length > 1){
+                            return NextExt.instance().removeClass($el, $split);
+                        } else {
+                            $el.classList.remove($v.trim());
+                        } 
+                    }
+                });
+            } else {
+                let $split = $class.trim().split(" ");
+                if($split.length > 1){
+                    return NextExt.instance().removeClass($el, $split);
+                }else{
+                    $el.classList.remove($class);
+                }
+            }
+        }
+    }
+
+    // toggle class
+    toggleClass($el, $class = ''){
+        if($el && $class != ''){
+            if( Array.isArray($class) && $class.length > 0){
+                $class.forEach(function($v){
+                    if($v.trim() != ''){
+                        let $split = $v.trim().split(" ");
+                        if($split.length > 1){
+                            return NextExt.instance().toggleClass($el, $split);
+                        } else {
+                            $el.classList.toggle($v.trim());
+                        } 
+                    }
+                });
+            } else {
+                let $split = $class.trim().split(" ");
+                if($split.length > 1){
+                    return NextExt.instance().toggleClass($el, $split);
+                }else{
+                    $el.classList.toggle($class);
+                } 
+            }
+        }
+    }
+
+    // get attribute
+    getAttr($el, $attr = ''){
+        if($el && $attr != ''){
+            return ($el.hasAttribute($attr)) ? $el.getAttribute($attr) : null;
+        }
+        return null;
+    }
+
+    // set attribute
+    setAttr($el, $attr = '', $val = ''){
+        if($el){
+            if( Object.entries($attr) ){ 
+                for (const [$k, $v] of Object.entries($attr)) {
+                    if( $k == ''){
+                        continue;
+                    }
+                    let $key = $k.replace(/_/g, '-').replace(/--/g, '-');
+                    $el.setAttribute($key, $v);
+                }
+            } else if($attr != '' && $val != ''){
+                $el.setAttribute($attr, $val);
+            }
+        }
+    }
+
+    // check attribue
+    checkAttr($el, $attr = ''){
+        return ($el.hasAttribute($attr)) ? true : false;
+    }
+
+    // instance of class
+
     static instance() {
         return new NextExt();
     }
 }
+
+
+// decelar class function
+var $nx = {
+    el: NextExt.createElement,
+    parents: NextExt.instance().getParents,
+    parent: NextExt.instance().getParent,
+    getClass: NextExt.instance().getClass,
+    addClass: NextExt.instance().addClass,
+    removeClass: NextExt.instance().removeClass,
+    toggleClass: NextExt.instance().toggleClass,
+    getAttr: NextExt.instance().getAttr,
+    setAttr: NextExt.instance().setAttr,
+    checkAttr: NextExt.instance().checkAttr,
+    append: NextExt.instance().appendEle,
+    after: NextExt.instance().afterEle,
+    before: NextExt.instance().beforeEle,
+    addElement: NextExt.instance().nx_append,
+};

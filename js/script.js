@@ -1,5 +1,4 @@
 "use strict";
-var el = NextExt.createElement;
 
 let $prefix = 'app-';
 let $div = document.querySelector('.app');
@@ -10,7 +9,7 @@ function app_home( e){
 }
 
 /*start header section*/
-let $header = el(
+let $header = $nx.el(
     $div,
     'header',
     {
@@ -33,7 +32,7 @@ let $header = el(
             'child' : [
                 'div',
                 {
-                    class: $prefix+'continer header-main'
+                    class: $prefix+'continer header-main app-header1'
                 },
                 [
                     // logo area
@@ -155,7 +154,7 @@ let $header = el(
 
 /*Footer render*/ 
 
-let $footer = el(
+let $footer = $nx.el(
     $div,
     'footer',
     {
@@ -254,7 +253,7 @@ let $footer = el(
 );
 
 
-el( document.querySelector('.app-menu-ul'),
+$nx.el( document.querySelector('.app-menu-ul'),
     'div',
     {
         class: 'top-div',
@@ -266,5 +265,17 @@ el( document.querySelector('.app-menu-ul'),
     'after'
 );
 
-let $parent = NextExt.instance().getParents(document.querySelector('.app-menu-ul'), '.app-header');
-console.log($parent);
+let $parent = $nx.parents(document.querySelector('.app-menu-ul'), '.app-header');
+
+// add class
+$nx.addClass( document.querySelector('.app-menu-ul'), ['golap', 'mostafa', 'fsdfsf hazi']);
+
+let $getClaas = $nx.getClass( document.querySelector('.app-menu-ul'));
+
+//set attribute
+$nx.setAttr( document.querySelector('.app-menu-ul'), {golap: 'test', mostaf : 'fdff'});
+
+// remove class
+$nx.removeClass( document.querySelector('.app-menu-ul'), ['golap', 'fsdfsf hazi1']);
+
+console.log($nx);
