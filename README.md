@@ -35,6 +35,49 @@ For usage and examples, have a look at :rocket: [online demo]()
 
 </html>
 ```
+2. Create Js file `script.js` and start coding here.
+```js
+let $prefix = 'app-';
+
+nJs.el( document.querySelector('.app'),
+    'div',
+    {
+        class: $prefix+'top-div',
+        content: 'Top Div'
+    },
+    [
+
+    ],
+    'after'
+);
+```
+3. use this other method
+```js
+var nJs = {
+    el: NextExt.createElement,
+    parents: NextExt.instance().getParents,
+    parent: NextExt.instance().getParent,
+    getClass: NextExt.instance().getClass,
+    addClass: NextExt.instance().addClass,
+    removeClass: NextExt.instance().removeClass,
+    toggleClass: NextExt.instance().toggleClass,
+    getAttr: NextExt.instance().getAttr,
+    setAttr: NextExt.instance().setAttr,
+    checkAttr: NextExt.instance().checkAttr,
+    append: NextExt.instance().appendEle,
+    after: NextExt.instance().afterEle,
+    before: NextExt.instance().beforeEle,
+    addElement: NextExt.instance().addElement,
+    find: NextExt.instance().find,
+    ajax: NextExt.instance().ajaxRequest,
+    get: NextExt.instance().getRequest,
+    post: NextExt.instance().postRequest,
+    json: NextExt.instance().getJson,
+    jsonToStr: NextExt.instance().jsonToStr,
+    strToJson: NextExt.instance().strToJson,
+};
+console.log(nJs);
+```
 
 ## Support
 
