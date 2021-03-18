@@ -9,7 +9,7 @@ function app_home( e){
 }
 
 /*start header section*/
-let $header = $nx.el(
+let $header = nJs.el(
     $div,
     'header',
     {
@@ -43,7 +43,7 @@ let $header = $nx.el(
                                 class: $prefix+'logo'
                             },
                             [
-                                {
+                                /*{
                                     'child' : [
                                         'img',
                                         {
@@ -51,7 +51,7 @@ let $header = $nx.el(
                                             src: 'assets/logo.jpg'
                                         }
                                     ]
-                                }
+                                }*/
                             ]
                         ]
                     },
@@ -84,7 +84,7 @@ let $header = $nx.el(
                                                                 {
                                                                     href: '#home',
                                                                     innerHTML: 'Home',
-                                                                    data_title_name: 'home',
+                                                                    'data-title-name': 'My Home',
                                                                     trigger: 
                                                                     {
                                                                         click: ['app_home', {f: 'name'}],
@@ -154,7 +154,7 @@ let $header = $nx.el(
 
 /*Footer render*/ 
 
-let $footer = $nx.el(
+let $footer = nJs.el(
     $div,
     'footer',
     {
@@ -253,7 +253,7 @@ let $footer = $nx.el(
 );
 
 
-$nx.el( document.querySelector('.app-menu-ul'),
+nJs.el( document.querySelector('.app-menu-ul'),
     'div',
     {
         class: 'top-div',
@@ -265,17 +265,103 @@ $nx.el( document.querySelector('.app-menu-ul'),
     'after'
 );
 
-let $parent = $nx.parents(document.querySelector('.app-menu-ul'), '.app-header');
+// add element by arrow
+nJs.addElement(
+    [
+        [
+            '.app-menu-ul',
+            'div',
+            {
+                class: 'top-div1',
+                content: 'Top Div 1'
+            },
+            [
+
+            ],
+            '2'
+        ],
+        [
+            '.app-menu-ul',
+            'div',
+            {
+                class: 'top-div2',
+                content: 'Top Div 2'
+            },
+            [
+
+            ],
+            '1'
+        ],
+        [
+            '.app-menu-ul',
+            'div',
+            {
+                class: 'top-div3',
+                content: 'Top Div 3'
+            },
+            [
+
+            ],
+            '0'
+        ]
+    ]
+);
+
+
+console.log(nJs);
+
+let $parent = nJs.parents(document.querySelector('.app-menu-ul'), '.app-header');
 
 // add class
-$nx.addClass( document.querySelector('.app-menu-ul'), ['golap', 'mostafa', 'fsdfsf hazi']);
+nJs.addClass( document.querySelector('.app-menu-ul'), ['golap', 'mostafa', 'fsdfsf hazi']);
 
-let $getClaas = $nx.getClass( document.querySelector('.app-menu-ul'));
+let $getClaas = nJs.getClass( document.querySelector('.app-menu-ul'));
 
 //set attribute
-$nx.setAttr( document.querySelector('.app-menu-ul'), {golap: 'test', mostaf : 'fdff'});
+nJs.setAttr( document.querySelector('.app-menu-ul'), {golap: 'test', mostaf : 'fdff'});
 
 // remove class
-$nx.removeClass( document.querySelector('.app-menu-ul'), ['golap', 'fsdfsf hazi1']);
+nJs.removeClass( document.querySelector('.app-menu-ul'), ['golap', 'fsdfsf hazi1']);
 
-console.log($nx);
+// find
+let $find = nJs.find('.app-menu-ul');
+
+// ajax
+/*
+nJs.ajax(
+    {
+        'action' : './ajax.txt',
+        'method' : 'POST', 
+        'header' : {
+            "Content-type" : 'application/x-www-form-urlencoded'
+        },
+        'data' : {
+            'test1' : 'golap',
+            'test2' : 'mostafa'
+        }
+    }
+)
+*/
+// get
+nJs.get('./ajax.txt', 
+    {
+        'header' : {
+            "Content-type" : 'application/x-www-form-urlencoded'
+        },
+        'data' : {
+            'test1' : 'golap',
+            'test2' : 'mostafa'
+        }
+    }
+).onload = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.querySelector(".app-header h1").innerHTML = this.responseText;
+    }
+};
+
+
+// get json
+/*
+nJs.json('http://localhost/next-js-extention/js/json/test.json').onload = function(res){
+    console.log( nJs.strToJson(this.response) );
+};*/

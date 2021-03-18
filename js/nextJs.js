@@ -29,6 +29,25 @@ class NextExt{
         return $el;
     }
 
+    // add element
+    addElement($arr){
+        var $el, $eleTag, $props, $child, $typeNew, $append;
+        if( Array.isArray($arr) ){
+            $arr.forEach(function($data){
+                $el = ($data[0]) ? $data[0] : '';
+                $append = document.querySelector($el);
+                if($append){
+                    $eleTag = ($data[1]) ? $data[1] : '';
+                    $props = ($data[2]) ? $data[2] : '';
+                    $child = ($data[3]) ? $data[3] : [];
+                    $typeNew = ($data[4]) ? $data[4] : 'append';
+                    NextExt.createElement($append, $eleTag, $props, $child, $typeNew);
+                }
+               
+            });
+        }
+    }
+
     nx_append($append, $element, $props, $type = 'append'){
         let $attr = ['content', 'contenthtml', 'contentHTML', 'innerhtml', 'innerHTML', 'innerText', 'contentText', 'trigger', 'removetrigger'];
         if($append){
@@ -123,15 +142,18 @@ class NextExt{
         return $element;
     }
 
+    jsonToStr( $json ){
+        return JSON.stringify($json);
+    }
+    strToJson( $json ){
+        return JSON.parse($json);
+    }
+
     getJson($url){
-        if( NextExt.instance().checkFileExist($url) ){
-            fetch($url).then(function(response){
-                return response.json();
-            }).then(data => {
-                //console.log(data);
-            });
-        }
-        return null;
+        var xhr = NextExt.instance().httpRequest();
+        xhr.open('GET', $url);
+        xhr.send();
+        return xhr;
     }
 
     checkFileExist( url ) { 
@@ -290,8 +312,92 @@ class NextExt{
         return ($el.hasAttribute($attr)) ? true : false;
     }
 
-    // instance of class
+    find($el){
+        return (document.querySelectorAll($el)) ? document.querySelectorAll($el) : null;
+    }
+    
+    // ajax request
+    ajaxRequest($params){
+        let $method = ($params.method) ? $params.method : 'GET';
 
+        var $ajax =  NextExt.instance().httpRequest();
+        $ajax.open($method, NextExt.instance().buildUrl($params), true);
+        NextExt.instance().header($ajax, $params);
+        
+        if( $method == 'post' || $method == 'POST'){
+            let $data = NextExt.instance().dataSend($params);
+            $ajax.send($data);
+        } else {
+            $ajax.send();
+        }
+       return $ajax;
+    }
+
+    // get request
+    getRequest( $action, $params ){
+        var $ajax =  NextExt.instance().httpRequest();
+        $params.action = ($params.action) ? $params.action : $action;
+        $ajax.open("GET", NextExt.instance().buildUrl($params), true);
+        NextExt.instance().header($ajax, $params);
+        $ajax.send();
+       return $ajax;
+    }
+
+    //post request
+    postRequest($action, $params){
+        var $ajax =  NextExt.instance().httpRequest();
+        $action = ($params.action) ? $params.action : $action;
+        $ajax.open("POST", $action , true);
+        let $data = NextExt.instance().dataSend($params);
+        $ajax.send($data);
+       return $ajax;
+    }
+
+    // build url
+    buildUrl($params){
+        let $action = ($params.action) ? $params.action : '';
+        let $method = ($params.method) ? $params.method : 'GET';
+
+        if( $method == 'get' || $method == 'GET'){
+            let $data = ($params.data) ? $params.data : '';
+            if( Object.entries($data) ){ 
+                let $add = new URLSearchParams($data);
+                if( $action.split('?').length > 1 ){
+                    return $action+'&'+$add;
+                }
+                return $action+'?'+$add;
+            }
+        }
+        return $action;
+    }
+    // request http
+    httpRequest(){
+        return new XMLHttpRequest();
+    }
+    // add header
+    header($ajax, $params ){
+        let $header = ($params.header) ? $params.header : '';
+        // set header
+        if( Object.entries($header) ){ 
+            for (const [$k, $v] of Object.entries($header)) {
+                if( $k == ''){
+                    continue;
+                }
+                $ajax.setRequestHeader($k, $v);
+            }
+        }
+        return $ajax;
+    }
+    // add data in url
+    dataSend($params){
+        let $data = ($params.data) ? $params.data : '';
+        const $dataLink = [];
+        if( Object.entries($data) ){ 
+            return new URLSearchParams($data);
+        }
+        return;
+    }
+    // instance of class
     static instance() {
         return new NextExt();
     }
@@ -299,7 +405,7 @@ class NextExt{
 
 
 // decelar class function
-var $nx = {
+var nJs = {
     el: NextExt.createElement,
     parents: NextExt.instance().getParents,
     parent: NextExt.instance().getParent,
@@ -313,5 +419,12 @@ var $nx = {
     append: NextExt.instance().appendEle,
     after: NextExt.instance().afterEle,
     before: NextExt.instance().beforeEle,
-    addElement: NextExt.instance().nx_append,
+    addElement: NextExt.instance().addElement,
+    find: NextExt.instance().find,
+    ajax: NextExt.instance().ajaxRequest,
+    get: NextExt.instance().getRequest,
+    post: NextExt.instance().postRequest,
+    json: NextExt.instance().getJson,
+    jsonToStr: NextExt.instance().jsonToStr,
+    strToJson: NextExt.instance().strToJson,
 };
