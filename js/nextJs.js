@@ -1,4 +1,12 @@
 "use strict";
+/**
+* Name: NextJs
+* Desc: A Simple and Lightweight JavScript Framework.
+* version: 1.0.0
+* Package: @NextJs
+* Author: ThemeDev
+* Developer: Hazi
+*/
 class NextExt{
     constructor(){
         let $window = window;
