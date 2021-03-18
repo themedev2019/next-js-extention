@@ -51,7 +51,8 @@ nJs.el( document.querySelector('.app'),
     'after'
 );
 ```
-3. use this other method
+<h3>use the other method</h3>
+
 ```js
 var nJs = {
     el: NextExt.createElement,
