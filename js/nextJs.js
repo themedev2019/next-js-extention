@@ -405,6 +405,16 @@ class NextExt{
         }
         return;
     }
+    serialize( $form ){
+        let $out = [];
+        $form.querySelectorAll('[name]').forEach((elem) => {
+            $out.push(elem.name + '=' + elem.value);
+        });
+        if($out.length > 0)
+            return $out.join('&');
+        else
+            return false;
+    }
     // instance of class
     static instance() {
         return new NextExt();
@@ -435,4 +445,5 @@ var nJs = {
     json: NextExt.instance().getJson,
     jsonToStr: NextExt.instance().jsonToStr,
     strToJson: NextExt.instance().strToJson,
+    serialize: NextExt.instance().serialize,
 };
