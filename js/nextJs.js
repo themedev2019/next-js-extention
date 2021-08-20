@@ -116,9 +116,11 @@ class NextExt{
                 if( $k == ''){
                     continue;
                 }
-                var fn = window[$k];
+                var fn = window[$v];
                 if( typeof fn === "function"){
                     $element.removeEventListener($k, fn);
+                } else {
+                    $element.removeEventListener($k, $v);
                 }
             }
         }
@@ -138,11 +140,15 @@ class NextExt{
                     var fn = window[$func];
                     if( typeof fn === "function"){
                         $element.addEventListener($k, fn, $params);
+                    } else {
+                        $element.addEventListener($k, $func, $params);
                     }
                 }else{
                     var fn = window[$v];
                     if( typeof fn === "function"){
                         $element.addEventListener($k, fn);
+                    } else {
+                        $element.addEventListener($k, $v);
                     }
                 }
             }
