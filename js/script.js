@@ -365,3 +365,52 @@ nJs.get('./ajax.txt',
 nJs.json('http://localhost/next-js-extention/js/json/test.json').onload = function(res){
     console.log( nJs.strToJson(this.response) );
 };*/
+
+var $form = document.querySelector($nxCamSetting.save_form);
+if( $form ){
+    // submit form
+    $form.removeEventListener('submit', $nxCamSetting.saveSetting);
+    $form.addEventListener('submit', $nxCamSetting.saveSetting);
+
+}
+
+$nxCamSetting = {
+        
+    saveSetting: function( $e ){
+        $e.preventDefault();
+        var $this = this;
+
+        var $btn = $this.querySelector('button.full-demo');
+        
+        $btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
+        $this.classList.add('next3-loading');
+
+        nJs.ajax(
+            {
+                'action' : nextcam.ajax_url+'?action=nextcamsave_settings',
+                'method' : 'POST', 
+                'header' : {
+                'X-WP-Nonce' : window.nextcam.nonce
+                },
+                'data' : {
+                    message: 'save settings data',
+                    'form_data': nJs.serialize($this)
+                }
+            }
+        ).onload = function() {
+            
+            if (this.readyState == 4 && this.status == 200) {
+                let $res = JSON.parse(this.responseText);
+
+                $btn.innerHTML = '<i></i> Saved';
+                
+                var tim = setInterval(function(){
+                    $btn.innerHTML = '<i></i> Save Settings';
+                    clearInterval(tim);
+            }, 1500);
+
+            $this.classList.remove('next3-loading');
+            }
+        }
+    }
+};
