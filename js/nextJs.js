@@ -414,7 +414,14 @@ class NextExt{
     serialize( $form ){
         let $out = [];
         $form.querySelectorAll('[name]').forEach((elem) => {
-            $out.push(elem.name + '=' + elem.value);
+            if(elem.type == 'checkbox' || elem.type == 'radio'){
+                if(elem.checked == true){
+                    $out.push(elem.name + '=' + elem.value);
+                }
+            }else{
+                $out.push(elem.name + '=' + elem.value);
+            }
+            
         });
         if($out.length > 0)
             return $out.join('&');
